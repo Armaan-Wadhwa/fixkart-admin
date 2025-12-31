@@ -16,7 +16,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { IndianRupee, Truck, CheckCircle, Clock, Users, UserCheck, UserX, AlertCircle } from "lucide-react";
 import { DashboardCharts } from "@/components/admin/dashboard-charts";
-
+export const dynamic = "force-dynamic";
 export default async function AdminDashboard() {
     // 1. Calculate Date Range (Last 7 Days)
     const sevenDaysAgo = new Date();
