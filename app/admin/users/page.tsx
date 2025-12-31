@@ -11,7 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import UserSearch from "@/components/admin/user-search";
 import UserActions from "@/components/admin/user-actions";
-
+export const dynamic = "force-dynamic";
 // FIX: params and searchParams are Promises in Next.js 15
 export default async function UsersPage({
     searchParams,

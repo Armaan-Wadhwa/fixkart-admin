@@ -24,7 +24,7 @@ const mockProducts = [
         category: "Power Tools",
     },
 ];
-
+export const dynamic = "force-dynamic";
 export default function ProductsPage() {
     return (
         <div>
