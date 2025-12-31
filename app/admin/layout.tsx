@@ -10,7 +10,7 @@ import AdminBreadcrumbs from "@/components/admin/breadcrumbs";
 import { VendorProvider } from "@/components/admin/vendor-context";
 
 const ADMIN_EMAIL = "jka8685@gmail.com";
-
+export const dynamic = "force-dynamic";
 export default function AdminLayout({
     children,
 }: {
