@@ -1,0 +1,158 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// 1. MAIN PRODUCT MODEL
+model Product {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  
+  // --- OWNER TRACKING (NEW) ---
+  vendorId       String   // Stores the Clerk User ID. Required for ownership checks.
+
+  // --- IDENTIFICATION ---
+  name           String   // Internal ID/Name (e.g. "anchor-wedge-m6")
+  title          String   // Display Title (e.g. "M6 Wedge Anchor")
+  slug           String   @unique
+  description    String
+
+  // --- HIERARCHY (3 Levels) ---
+  category       String   // Level 1: e.g., "fastening"
+  subCategory    String?  // Level 2: e.g., "anchors"
+  subSubCategory String?  // Level 3: e.g., "wedge-anchors"
+
+  // --- IMAGES ---
+  image          String   // Main Display Image (URL or Path)
+  imagePath      String?  // Internal Path (Backup for local uploads)
+  gallery        String[] // Array of strings for extra images
+  
+  // --- PRICE & INVENTORY ---
+  price          Float    @default(0.0)
+  quantity       Int      @default(10)
+  sku            String?  @unique // Stock Keeping Unit (e.g. "ANC-WDG-M6")
+  
+  // --- HARDWARE SPECIFICS ---
+  // Store things like { "material": "SS304", "size": "M6x50", "thread": "Standard" }
+  specs          Json?    
+  brand          String?
+  
+  // --- STATUS ---
+  isPublished    Boolean  @default(false)
+  isFeatured     Boolean  @default(false)
+
+  // --- RELATIONS ---
+  variants       Variant[]
+  
+  // --- TIMESTAMPS ---
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// 2. VARIANT MODEL (For sizes/options of the same product)
+model Variant {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String   // e.g. "Pack of 50" or "Length 20mm"
+  price       Float
+  stock       Int      @default(0)
+  sku         String?
+  
+  // Relation back to Product
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId   String   @db.ObjectId
+}
+
+// ... (Existing Product and Variant models)
+
+model VendorProfile {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @unique // Links to Clerk User ID
+
+  status         String   @default("PENDING") // Options: PENDING, APPROVED, REJECTED
+
+  // --- BASIC INFO ---
+  fullName       String
+  companyName    String?
+  gstNumber      String?
+  phone          String
+  email          String
+  address        String
+  city           String
+  state          String
+  postalCode     String
+
+  // --- BUSINESS DETAILS ---
+  businessType       String // Retailer, OEM, etc.
+  yearsInBusiness    String?
+  // REMOVED: productsInterested
+
+  // --- KYC ---
+  idProofType    String // Aadhar, PAN, etc.
+  idProofNumber  String
+  idProofUrl     String // Cloudinary URL
+
+  // --- BANK DETAILS ---
+  bankName       String
+  accountHolder  String
+  accountNumber  String
+  ifscCode       String
+
+  // --- EXTRA ---
+  tradeLicense       String?
+  contactPerson      String?
+  alternateContact   String?
+  
+  // --- LOCATION PROOF ---
+  gpsLat             Float?
+  gpsLng             Float?
+  locationPhotoUrl   String // Cloudinary URL
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Order {
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  
+  status          String      @default("PENDING") // PENDING, APPROVED, REJECTED, COMPLETED
+  totalAmount     Float
+  
+  customerId      String      // Clerk User ID of the buyer
+  customerName    String
+  customerEmail   String?
+  customerPhone   String?
+  
+  // Important: Link order to a specific Vendor
+  vendorId        String      
+  
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  orderId     String  @db.ObjectId
+  order       Order   @relation(fields: [orderId], references: [id])
+  
+  productId   String  @db.ObjectId
+  productName String
+  image       String?
+  price       Float
+  quantity    Int
+
+}
+
+model Category {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String   @unique
+  description String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
