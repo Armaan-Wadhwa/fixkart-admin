@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import OrdersTable from "@/components/admin/orders-table";
-
+export const dynamic = "force-dynamic";
 export default async function OrdersPage() {
 
     // 1. Fetch PENDING orders from Database
