@@ -70,7 +70,7 @@ export default async function UsersPage({
                         ) : (
                             users.map((user) => {
                                 const primaryEmail = user.emailAddresses.find(
-                                    (email) => email.id === user.primaryEmailAddressId
+                                    (email: any) => email.id === user.primaryEmailAddressId
                                 )?.emailAddress;
 
                                 const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim() || "No Name";
