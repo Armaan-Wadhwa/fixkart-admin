@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import OrderHistoryTable from "@/components/admin/order-history-table";
 import TableSearch from "@/components/admin/table-search"; // Import the new search bar
-
+export const dynamic = "force-dynamic";
 // 1. Accept searchParams as a prop
 export default async function OrderHistoryPage({
     searchParams,
