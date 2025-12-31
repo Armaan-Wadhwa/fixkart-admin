@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import VendorsTable from "@/components/admin/vendors-table";
-
+export const dynamic = "force-dynamic";
 // This MUST be the default export
 export default async function OnboardedVendorsPage() {
 
