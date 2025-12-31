@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import PendingVendorsTable from "@/components/admin/pending-vendors-table";
-
+export const dynamic = "force-dynamic";
 // This is a Server Component (fetches data on the server)
 export default async function VendorsPage() {
 

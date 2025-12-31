@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
+export const dynamic = "force-dynamic";
 // 1. FIX: Update type to Promise<{ id: string }>
 export default async function VendorDetailsPage({ params }: { params: Promise<{ id: string }> }) {
 
