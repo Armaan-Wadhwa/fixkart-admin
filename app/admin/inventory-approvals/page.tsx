@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import ProductApprovalTable from "@/components/admin/product-approval-table";
+import { unstable_noStore as noStore } from "next/cache";
 export const dynamic = "force-dynamic";
 export default async function InventoryApprovalsPage() {
     // 1. Fetch products that are NOT published yet
